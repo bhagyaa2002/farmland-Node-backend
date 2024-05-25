@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { mongoConnection } from "./utils/mongoDB.js";
 import { signUp, getUserDetails,login,updateUserPasswordByEmail } from "./users/userService.js";
+import { addCrop,updateCrop,deleteCrop,getAllCrops } from "./crops/cropService.js";
 
 dotenv.config();
 const app = express();
@@ -29,5 +30,17 @@ app.post("/login", (request, response) => {
   });
 app.post("/resetPassword", (request, response) => {
     updateUserPasswordByEmail(request, response);
+  });
+app.post("/addCrop", (request, response) => {
+    addCrop(request, response);
+  });
+app.post("/updateCrop", (request, response) => {
+    updateCrop(request, response);
+  });
+  app.post("/deleteCrop", (request, response) => {
+    deleteCrop(request, response);
+  });
+  app.get("/getAllCrops", (request, response) => {
+    getAllCrops(request, response);
   });
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
