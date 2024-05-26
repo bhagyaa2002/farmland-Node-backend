@@ -11,6 +11,7 @@ import { addCropOrderHistory,fetchCropOrderHistoryByUser,fetchCropOrderHistoryBy
 import { addFertilizerOrderHistory,fetchFertilizerOrderHistoryByUser,fetchFertilizerOrderHistoryBySeller } from "./fertilizerOrderhistory/fertilizerOrderHistoryService.js";
 import { addArticle,getAllArticle } from "./article/articleService.js";
 import { addScheme,getAllScheme } from "./scheme/schemeService.js";
+import { addNews,getAllNews } from "./news/newsService.js";
 
 dotenv.config();
 const app = express();
@@ -124,10 +125,17 @@ app.post("/updateFertilizerListing", (request, response) => {
   });
 
   app.post("/addScheme", (request, response) => {
-    addArticle(request, response);
+    addScheme(request, response);
   });
   app.get("/getAllScheme", (request, response) => {
-    getAllArticle(request, response);
+    getAllScheme(request, response);
+  });
+  
+  app.post("/addNews", (request, response) => {
+    addNews(request, response);
+  });
+  app.get("/getAllNews", (request, response) => {
+    getAllNews(request, response);
   });
   
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
