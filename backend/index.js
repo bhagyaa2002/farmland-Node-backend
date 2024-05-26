@@ -9,6 +9,7 @@ import { addCropListing,updateCropListing,deleteCropListing,getAllCropListing,ge
 import { addFertilizerListing,updateFertilizerListing,deleteFertilizerListing,getAllFertilizerListing,getOneFertlizerListing } from "./fertilizerlisting/fertilizerListingService.js";
 import { addCropOrderHistory,fetchCropOrderHistoryByUser,fetchCropOrderHistoryBySeller } from "./cropOrderHistory/cropOrderHistoryService.js";
 import { addFertilizerOrderHistory,fetchFertilizerOrderHistoryByUser,fetchFertilizerOrderHistoryBySeller } from "./fertilizerOrderhistory/fertilizerOrderHistoryService.js";
+import { addArticle,getAllArticle } from "./article/articleService.js";
 
 dotenv.config();
 const app = express();
@@ -113,5 +114,11 @@ app.post("/updateFertilizerListing", (request, response) => {
   app.post("/fetchFertilizerOrderHistoryBySeller", (request, response) => {
     fetchFertilizerOrderHistoryBySeller(request, response);
   });
-  
+
+  app.post("/addArticle", (request, response) => {
+    addArticle(request, response);
+  });
+  app.get("/getAllArticle", (request, response) => {
+    getAllArticle(request, response);
+  });
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
