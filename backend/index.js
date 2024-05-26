@@ -6,7 +6,7 @@ import { signUp, getUserDetails,login,updateUserPasswordByEmail } from "./users/
 import { addCrop,updateCrop,deleteCrop,getAllCrops } from "./crops/cropService.js";
 import { addPendingCrop,updatePendingCrop,deletePendingCrop,getAllPendingCrops } from "./pendingCrops/pendngCropService.js";
 import { addCropListing,updateCropListing,deleteCropListing,getAllCropListing,getOneCropListing} from "./cropListing/cropListingService.js";
-
+import { addFertilizerListing,updateFertilizerListing,deleteFertilizerListing,getAllFertilizerListing,getOneFertlizerListing } from "./fertilizerlisting/fertilizerListingService.js";
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -73,6 +73,23 @@ app.post("/updateCropListing", (request, response) => {
   });
   app.post("/getOneCropListing", (request, response) => {
     getOneCropListing(request, response);
+  });
+
+
+  app.post("/addFertilizerListing", (request, response) => {
+    addFertilizerListing(request, response);
+  });
+app.post("/updateFertilizerListing", (request, response) => {
+  updateFertilizerListing(request, response);
+  });
+  app.post("/deleteFertilizerListing", (request, response) => {
+    deleteFertilizerListing(request, response);
+  });
+  app.get("/getAllFertilizerListing", (request, response) => {
+    getAllFertilizerListing(request, response);
+  });
+  app.post("/getOneFertlizerListing", (request, response) => {
+    getOneFertlizerListing(request, response);
   });
 
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
