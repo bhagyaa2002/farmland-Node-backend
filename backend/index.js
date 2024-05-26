@@ -8,6 +8,7 @@ import { addPendingCrop,updatePendingCrop,deletePendingCrop,getAllPendingCrops }
 import { addCropListing,updateCropListing,deleteCropListing,getAllCropListing,getOneCropListing} from "./cropListing/cropListingService.js";
 import { addFertilizerListing,updateFertilizerListing,deleteFertilizerListing,getAllFertilizerListing,getOneFertlizerListing } from "./fertilizerlisting/fertilizerListingService.js";
 import { addCropOrderHistory,fetchCropOrderHistoryByUser,fetchCropOrderHistoryBySeller } from "./cropOrderHistory/cropOrderHistoryService.js";
+import { addFertilizerOrderHistory,fetchFertilizerOrderHistoryByUser,fetchFertilizerOrderHistoryBySeller } from "./fertilizerOrderhistory/fertilizerOrderHistoryService.js";
 
 dotenv.config();
 const app = express();
@@ -101,6 +102,16 @@ app.post("/updateFertilizerListing", (request, response) => {
   });
   app.post("/fetchCropOrderHistoryBySeller", (request, response) => {
     fetchCropOrderHistoryBySeller(request, response);
+  });
+
+  app.post("/addFertilizerOrderHistory", (request, response) => {
+    addFertilizerOrderHistory(request, response);
+  });
+  app.post("/fetchFertilizerOrderHistoryByUser", (request, response) => {
+    fetchFertilizerOrderHistoryByUser(request, response);
+  });
+  app.post("/fetchFertilizerOrderHistoryBySeller", (request, response) => {
+    fetchFertilizerOrderHistoryBySeller(request, response);
   });
   
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
