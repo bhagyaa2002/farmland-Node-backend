@@ -5,6 +5,7 @@ import { mongoConnection } from "./utils/mongoDB.js";
 import { signUp, getUserDetails,login,updateUserPasswordByEmail } from "./users/userService.js";
 import { addCrop,updateCrop,deleteCrop,getAllCrops } from "./crops/cropService.js";
 import { addPendingCrop,updatePendingCrop,deletePendingCrop,getAllPendingCrops } from "./pendingCrops/pendngCropService.js";
+import { addCropListing,updateCropListing,deleteCropListing,getAllCropListing,getOneCropListing} from "./cropListing/cropListingService.js";
 
 dotenv.config();
 const app = express();
@@ -57,4 +58,21 @@ app.post("/updatePendingCrop", (request, response) => {
   app.get("/getAllPendingCrops", (request, response) => {
     getAllPendingCrops(request, response);
   });
+
+  app.post("/addCropListing", (request, response) => {
+    addCropListing(request, response);
+  });
+app.post("/updateCropListing", (request, response) => {
+  updateCropListing(request, response);
+  });
+  app.post("/deleteCropListing", (request, response) => {
+    deleteCropListing(request, response);
+  });
+  app.get("/getAllCropListing", (request, response) => {
+    getAllCropListing(request, response);
+  });
+  app.post("/getOneCropListing", (request, response) => {
+    getOneCropListing(request, response);
+  });
+
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
