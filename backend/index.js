@@ -7,6 +7,8 @@ import { addCrop,updateCrop,deleteCrop,getAllCrops } from "./crops/cropService.j
 import { addPendingCrop,updatePendingCrop,deletePendingCrop,getAllPendingCrops } from "./pendingCrops/pendngCropService.js";
 import { addCropListing,updateCropListing,deleteCropListing,getAllCropListing,getOneCropListing} from "./cropListing/cropListingService.js";
 import { addFertilizerListing,updateFertilizerListing,deleteFertilizerListing,getAllFertilizerListing,getOneFertlizerListing } from "./fertilizerlisting/fertilizerListingService.js";
+import { addCropOrderHistory,fetchCropOrderHistoryByUser,fetchCropOrderHistoryBySeller } from "./cropOrderHistory/cropOrderHistoryService.js";
+
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -91,5 +93,14 @@ app.post("/updateFertilizerListing", (request, response) => {
   app.post("/getOneFertlizerListing", (request, response) => {
     getOneFertlizerListing(request, response);
   });
-
+  app.post("/addCropOrderHistory", (request, response) => {
+    addCropOrderHistory(request, response);
+  });
+  app.post("/fetchCropOrderHistoryByUser", (request, response) => {
+    fetchCropOrderHistoryByUser(request, response);
+  });
+  app.post("/fetchCropOrderHistoryBySeller", (request, response) => {
+    fetchCropOrderHistoryBySeller(request, response);
+  });
+  
 app.listen(PORT, () => console.log("server is running at port : " + PORT));
