@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    firstName: {
+    user_name: {
       type: String,
       required: true, 
     },
-    lastName: {
+    shop: {
       type: String,
       required: false,
     },
@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    state: {
+    location: {
       type: String,
       required: true,
     },
@@ -26,11 +26,11 @@ const userSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    phone: {
+    phoneNo: {
       type: String,
       required: true,
     },
-    userType: {
+    user_type: {
       type: String,
       required: true,
     }

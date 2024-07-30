@@ -13,7 +13,7 @@ export const signUp = async (request, response) => {
     } else {
       const data = new userModel(request.body);
       const save = await data.save();
-      response.send({ message: "Successfully signed up", id: save._id });
+      response.send({ message: "success", id: save._id });
     }
   } catch (error) {
     console.error(error);
@@ -59,17 +59,17 @@ export const login = async (request, response) => {
         if (password === result.password) {
           const userInfo = {
             _id: result._id,
-            firstName: result.firstName,
-            lastName: result.lastName,
+            user_name: result.user_name,
+            shop: result.shop,
             email: result.email,
             city: result.city,
-            state: result.state,
-            phone: result.phone,
-            userType: result.userType,
+            location: result.location,
+            phoneNo: result.phoneNo,
+            user_type: result.user_type,
           };
 
           response.send({
-            message: "Login Successful",
+            message: "success",
             data: userInfo,
           });
         } else {
@@ -80,7 +80,7 @@ export const login = async (request, response) => {
         }
       })
       .catch((error) => {
-        response.status(404).send({
+        response.send({
           message: "This email is not available,Please sign up",
         });
       });
