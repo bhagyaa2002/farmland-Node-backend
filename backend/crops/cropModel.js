@@ -2,112 +2,112 @@ import mongoose from "mongoose";
 const diseaseSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: false
     },
     description: {
         type: String,
-        required: true
+        required: false
     }
 }, { _id: false });
 
 const fertilizerSchema = new mongoose.Schema({
-    timePeriod: {
+    name: {
         type: String,
-        required: true
+        required: false
     },
     description: {
         type: String,
-        required: true
+        required: false
     }
 }, { _id: false });
 
 const cropSchema = new mongoose.Schema({
     bannerImageUrl: {
-      type: String,
-      required: true, 
+      type: [String],
+      required: false, 
     },
     category: {
       type: String,
       required: false,
     },
-    cropImageurl: {
+    cropImageUrl: {
       type: String,
-      required: true,
+      required: false,
     },
-    cropName: {
+    cropname: {
       type: String,
       unique: true,
-      required: true,
+      required: false,
     },
     chemicalFertilizer: {
       type: [fertilizerSchema],
-      required: true,
+      required: false,
     },
     description: {
       type: String,
-      required: true,
+      required: false,
     },
     disease: {
       type: [diseaseSchema],
-      required: true,
+      required: false,
     },
     harvesting: {
       type: [String],
-      required: true,
+      required: false,
     },
     irrigation: {
         type: String,
-        required: true,
+        required: false,
     },
     location: {
         type: String,
-        required: true,
+        required: false,
     },
     organicFertilizer: {
         type: [fertilizerSchema],
-        required: true,
+        required: false,
     },
     price: {
         type: Number,
-        required: true,
+        required: false,
     },
     seeding: {
         type: [String],
-        required: true,
+        required: false,
     },
     soilPreparation: {
         type: [String],
-        required: true,
+        required: false,
     },
-    soilType: {
+    soiltype: {
         type: String,
-        required: true,
+        required: false,
     },
     state: {
-        type: String,
-        required: true,
-    },
-    subCrops: {
         type: [String],
-        required: true,
+        required: false,
+    },
+    subcrops: {
+        type: [String],
+        required: false,
     },
     temperature: {
         type: Number,
-        required: true,
+        required: false,
     },
     variety: {
         type: [String],
-        required: true,
+        required: false,
     },
     waterManagement: {
         type: [String],
-        required: true,
+        required: false,
     },
-    youTubeLinks: {
+    youtubeLinks: {
         type: [String],
-        required: true,
+        required: false,
     }  
 
-  },{ timestamps: true });
+  },{ timestamps: false });
 
  export const cropModel = mongoose.model("crop", cropSchema);
