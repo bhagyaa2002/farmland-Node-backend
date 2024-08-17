@@ -110,8 +110,7 @@ export const getAllCrops = async (request, response) => {
           disease: formattedDiseaseData
         };
       });
-      console.log("line 113",formattedCrops[0]);
-  
+      
       response.send({ message: "Successfully fetched all crops", data: formattedCrops });
     } catch (error) {
         console.error(error);

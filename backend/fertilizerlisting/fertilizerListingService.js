@@ -4,6 +4,7 @@ import e, { request, response } from "express";
 export const addFertilizerListing = async(request,response)=>{
     console.log("inside fertilizer Listing upload service");
   try {
+    console.log("line 7",request.body);
       const data = new fertilizerListingModel(request.body);
       const save = await data.save();
       response.send({ message: "Successfully uploaded to fertilizer listing", id: save._id });

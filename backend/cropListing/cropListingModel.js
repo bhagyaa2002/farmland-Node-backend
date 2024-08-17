@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const cropListingSchema = new mongoose.Schema({
-    cropName: {
+    name: {
       type: String,
       required: true, 
     },
-    cropImage: {
+    url: {
       type: String,
       required: false,
     },
@@ -13,27 +13,31 @@ const cropListingSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    marketRate: {
+    mrp: {
       type: Number,
       required: true,
     },
-    supplierRate: {
+    offerPrice: {
       type: Number,
       required: true,
     },
-    timeframe: {
+    requiredtime: {
       type: String,
       required: true,
     },
-    cropType: {
+    croptype: {
       type: String,
       required: true,
     },
-    marketOwnerEmailId: {
+    owner: {
       type: String,
       required: true,
     },
-    remainingQuantity: {
+    location: {
+      type: String,
+      required: true,
+    },
+    reamining: {
         type: Number,
         required: true,
       }

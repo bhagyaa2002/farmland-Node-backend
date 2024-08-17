@@ -5,32 +5,36 @@ const fertilizerListingSchema = new mongoose.Schema({
       type: String,
       required: true, 
     },
-    image: {
+    url: {
       type: String,
       required: false,
     },
-    marketRate: {
+    mrp: {
       type: Number,
       required: true,
     },
-    offerRate: {
+    offerPrice: {
       type: Number,
       required: true,
     },
-    category: {
+    location: {
       type: String,
       required: true,
     },
-    type: {
+    categori: {
       type: String,
       required: true,
     },
-    marketOwnerEmailId: {
+    fertilizertype: {
       type: String,
       required: true,
     },
-    remainingQuantity: {
-        type: Number,
+    owner: {
+      type: String,
+      required: true,
+    },
+    quantity: {
+        type: String,
         required: true,
       }
   },{ timestamps: true });
