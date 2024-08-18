@@ -3,6 +3,7 @@ import { fertilizerOrderHistoryModel } from "./fertilizerOrderHistoryModel.js";
 export const addFertilizerOrderHistory = async(request,response)=>{
     console.log("inside Fertilizer order history upload service");
   try {
+    console.log("line 6", request.body);
       const data = new fertilizerOrderHistoryModel(request.body);
       const save = await data.save();
       response.send({ message: "Successfully uploaded to crop order history", id: save._id });
@@ -40,3 +41,15 @@ export const fetchFertilizerOrderHistoryBySeller = async(request,response)=>{
         response.status(500).send({ message: "Internal Server Error" });
       }
 }
+
+export const getAllFertilizerOrderTransaction = async (request, response) => {
+  console.log("inside get all fertilizer Order service");
+  try {
+
+      const fertilizerOrder = await fertilizerOrderHistoryModel.find();
+      response.send({ message: "Successfully fetched all fertilizerOrder", data: fertilizerOrder });
+  } catch (error) {
+      console.error(error);
+      response.status(500).send({ message: "Internal Server Error" });
+  }
+};

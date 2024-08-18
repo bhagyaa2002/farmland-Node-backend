@@ -8,7 +8,7 @@ import { addPendingCrop,updatePendingCrop,deletePendingCrop,getAllPendingCrops }
 import { addCropListing,updateCropListing,deleteCropListing,getAllCropListing,getOneCropListing} from "./cropListing/cropListingService.js";
 import { addFertilizerListing,updateFertilizerListing,deleteFertilizerListing,getAllFertilizerListing,getOneFertlizerListing } from "./fertilizerlisting/fertilizerListingService.js";
 import { addCropOrderHistory,fetchCropOrderHistoryByUser,fetchCropOrderHistoryBySeller,getAllCropOrderTransaction } from "./cropOrderHistory/cropOrderHistoryService.js";
-import { addFertilizerOrderHistory,fetchFertilizerOrderHistoryByUser,fetchFertilizerOrderHistoryBySeller } from "./fertilizerOrderhistory/fertilizerOrderHistoryService.js";
+import { addFertilizerOrderHistory,fetchFertilizerOrderHistoryByUser,fetchFertilizerOrderHistoryBySeller,getAllFertilizerOrderTransaction } from "./fertilizerOrderhistory/fertilizerOrderHistoryService.js";
 import { addArticle,getAllArticle } from "./article/articleService.js";
 import { addScheme,getAllScheme } from "./scheme/schemeService.js";
 import { addNews,getAllNews } from "./news/newsService.js";
@@ -109,8 +109,6 @@ app.post("/updateFertilizerListing", (request, response) => {
   app.get("/getAllCropOrderTransaction", (request, response) => {
     getAllCropOrderTransaction(request, response);
   });
-  
-
   app.post("/addFertilizerOrderHistory", (request, response) => {
     addFertilizerOrderHistory(request, response);
   });
@@ -120,7 +118,9 @@ app.post("/updateFertilizerListing", (request, response) => {
   app.post("/fetchFertilizerOrderHistoryBySeller", (request, response) => {
     fetchFertilizerOrderHistoryBySeller(request, response);
   });
-
+  app.get("/getAllFertilizerOrderTransaction", (request, response) => {
+    getAllFertilizerOrderTransaction(request, response);
+  });
   app.post("/addArticle", (request, response) => {
     addArticle(request, response);
   });
