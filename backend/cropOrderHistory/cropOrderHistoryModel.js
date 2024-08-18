@@ -1,30 +1,47 @@
 import mongoose from "mongoose";
-
+const timestampSchema = new mongoose.Schema({
+  seconds: {
+      type: String,
+      required: false
+  },
+  nanoseconds: {
+      type: String,
+      required: false
+  }
+}, { _id: false });
 const cropOrderHistorySchema = new mongoose.Schema({
-    cropId: {
+    cropName: {
       type: String,
       required: true, 
     },
-    quantity: {
+    Quantity: {
       type: Number,
       required: false,
     },
-    total: {
+    Total: {
       type: Number,
       required: true,
     },
-    orderedBy: {
+    owner: {
       type: String,
       required: true,
     },
-    soldBy: {
+    owner: {
       type: String,
       required: true,
     },
-    orderDateTime: {
+    sellerName: {
       type: String,
       required: true,
     },
+    transactionId: {
+      type: String,
+      required: true,
+    },
+    timestamp:{
+      type: timestampSchema,
+      required: false
+    }
   },{ timestamps: true });
 
  export const cropOrderHistoryModel = mongoose.model("cropOrderHistory", cropOrderHistorySchema);
