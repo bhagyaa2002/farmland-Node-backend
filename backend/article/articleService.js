@@ -3,6 +3,7 @@ import { articleModel } from "./articleModel.js";
 export const addArticle = async(request,response)=>{
     console.log("inside add Article upload service");
   try {
+    console.log("line 6",request.body);
       const data = new articleModel(request.body);
       const save = await data.save();
       response.send({ message: "Successfully upload article.", id: save._id });

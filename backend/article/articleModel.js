@@ -9,11 +9,11 @@ const articleSchema = new mongoose.Schema({
       type: String,
       required: false,
     },
-    imageUrl: {
+    img_url: {
       type: String,
-      required: true,
+      required: false,
     },
-    articleUrl: {
+    link: {
       type: String,
       required: true,
     },
