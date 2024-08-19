@@ -18,6 +18,10 @@ const cropOrderHistorySchema = new mongoose.Schema({
       type: Number,
       required: false,
     },
+    price: {
+      type: Number,
+      required: false,
+    },
     Total: {
       type: Number,
       required: true,
