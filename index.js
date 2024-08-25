@@ -12,6 +12,7 @@ import { addFertilizerOrderHistory,fetchFertilizerOrderHistoryByUser,fetchFertil
 import { addArticle,getAllArticle } from "./article/articleService.js";
 import { addScheme,getAllScheme } from "./scheme/schemeService.js";
 import { addNews,getAllNews } from "./news/newsService.js";
+import Stripe from "stripe";
 
 dotenv.config();
 const app = express();
@@ -19,7 +20,8 @@ app.use(cors());
 app.use(express.json({ limit: "10mb" }));
 const PORT = process.env.PORT || 8080;
 mongoConnection();
-
+const stripe = new Stripe("sk_test_51OYphVSIebbx1BJCNAITeg0nA6CaflgvU4TmUBZfiJ7v0mFa4XMtvDQKbwpxFiJcOI7k0RKFbqXpuWNllRaWSdhQ00Kx8aNwVJ");
+   
 console.log("Backend port", PORT);
 
 app.get("/", (request, response) => {
@@ -141,5 +143,85 @@ app.post("/updateFertilizerListing", (request, response) => {
   app.get("/getAllNews", (request, response) => {
     getAllNews(request, response);
   });
+
+  app.post("/checkout",async(request,response)=>{
+    const data=request.body;
+    console.log("line 148",data);
+    const quantity1 = Number(data.quantity);
+const offerPrice = Number(data.offerPrice);
+    const totalAmount=quantity1* offerPrice ;
+    const params = {
+      submit_type: "pay",
+      mode: "payment",
+      payment_method_types: ["card"],
+      billing_address_collection: "auto",
+      shipping_options: [{ shipping_rate: "shr_1OYqeFSIebbx1BJCVma4TXJL" }],
+      line_items: [
+        {
+          price_data: {
+            currency: "INR",
+            product_data: {
+              name: data.name,
+              // images: [data.image], // Uncomment and use if you have an image
+            },
+            unit_amount: data.offerPrice * 100, // Convert to smallest currency unit (e.g., paise)
+          },
+          adjustable_quantity: {
+            enabled: true,
+            minimum: 1,
+          },
+          quantity: data.quantity,
+        },
+      ],
+      success_url: `http://localhost:3000/buysucess/?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: "http://localhost:3000/cancel",
+       metadata: {
+            id: data.id, // Include the id in the metadata
+            owner: data.owner,
+            name: data.name,
+            quantity: data.quantity,
+            offerPrice: data.offerPrice,
+            farmerName: data.farmerName,
+            totalAmount: totalAmount
+
+        }
+    };
+     const session = await stripe.checkout.sessions.create(params);
+    response.send({ message: "Successfully created payment seesion", data: session.id});
+  })
   
+  app.post('/checkout/success', async (req, res) => {
+    console.log("line 191",req.body);
+    const sessionId = req.body.session_id; // Get session_id from query parameters
+      console.log("line 192",sessionId)
+    if (!sessionId) {
+        return res.status(400).send('Session ID is required');
+    }
+
+    try {
+        // Retrieve session details from Stripe
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+        // Extract the total amount and other details from metadata
+        const totalAmount = session.metadata.totalAmount;
+
+        // Send the necessary data for the frontend to complete the purchase
+        const data= {
+          id: session.metadata.id,
+          name: session.metadata.name,
+          offerPrice: session.metadata.offerPrice / 100,
+          quantity: session.metadata.quantity,
+          owner: session.metadata.owner,
+          totalAmount: session.metadata.totalAmount, // Send the total amount
+          farmerName:session.metadata.farmerName
+      }
+      res.send({ message: "Successfully created payment seesion", data: data});
+    } catch (error) {
+        console.error('Error retrieving Stripe session:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+
+
 app.listen(PORT, () => console.log("server is running at port : " + PORT));

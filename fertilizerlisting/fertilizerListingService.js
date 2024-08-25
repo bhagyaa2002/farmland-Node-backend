@@ -68,7 +68,9 @@ export const getOneFertlizerListing = async (request, response) => {
     console.log("inside get one fertilizer Listing service");
 
     try {
+
         const { _id} = request.body;
+        console.log("line 73",request.body);
         const result = await fertilizerListingModel.findById(_id);
     if (result) {
       response.send({ message: "Crop from fertilizerlisting Fetched Successfully",data:result });

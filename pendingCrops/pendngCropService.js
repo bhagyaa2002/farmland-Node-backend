@@ -4,9 +4,31 @@ import e, { request, response } from "express";
 export const addPendingCrop = async(request,response)=>{
     console.log("inside pending crop upload service");
   try {
-    const { cropName } = request.body.cropName;
+    const { cropname } = request.body.cropname;
+    console.log("line 8", request.body);
 
-    const result = await pendingCropModel.findOne({ cropName: cropName });
+    const result = await pendingCropModel.findOne({ cropname: cropname });
+    const formattedChemicalData = request.body.chemicalFertilizer.map(item => {
+        const monthRange = Object.keys(item);
+        const description = item[monthRange];
+        const name=monthRange[0];
+        return { name, description };
+      });
+    const formattedOrganicData = request.body.organicFertilizer.map(item => {
+        const monthRange = Object.keys(item);
+        const description = item[monthRange];
+        const name=monthRange[0];
+        return { name, description };
+      });
+      const formattedDiseaseData = request.body.disease.map(item => {
+        const monthRange = Object.keys(item);
+        const description = item[monthRange];
+        const name=monthRange[0];
+        return { name, description };
+      });
+    request.body.chemicalFertilizer=formattedChemicalData;
+    request.body.organicFertilizer=formattedOrganicData;
+    request.body.disease=formattedDiseaseData;
 
     if (result) {
       response.send({ message: "pending crop already exist" });
@@ -26,10 +48,10 @@ export const addPendingCrop = async(request,response)=>{
 export const updatePendingCrop = async (request, response) => {
     console.log("inside pending crop update service");
     try {
-        const { cropName, ...updateData } = request.body; // Extract cropName and the rest of the data
+        const { cropname, ...updateData } = request.body; // Extract cropname and the rest of the data
 
         const result = await pendingCropModel.findOneAndUpdate(
-            { cropName: cropName }, // Filter criteria
+            { cropname: cropname }, // Filter criteria
             { $set: updateData },   // Data to update
             { new: true, runValidators: true } // Options: return the updated document, run validators
         );
@@ -48,9 +70,9 @@ export const updatePendingCrop = async (request, response) => {
 export const deletePendingCrop = async (request, response) => {
     console.log("inside pending crop delete service");
     try {
-        const { cropName } = request.body; // Extract cropName from the request body
-
-        const result = await pendingCropModel.findOneAndDelete({ cropName: cropName }); // Find and delete the crop
+        const { cropname } = request.body; // Extract cropname from the request body
+        console.log("line 52",request.body);
+        const result = await pendingCropModel.findOneAndDelete({ cropname: cropname }); // Find and delete the crop
 
         if (result) {
             response.send({ message: "Successfully deleted pending crop", data: result._id });
@@ -67,6 +89,26 @@ export const getAllPendingCrops = async (request, response) => {
     console.log("inside get all pending crops service");
     try {
         const crops = await pendingCropModel.find(); // Retrieve all crop documents
+        const formattedCrops = crops.map(crop => {
+            const formattedChemicalData = crop.chemicalFertilizer.map(item => ({
+              [item.name]: item.description
+            }));
+      
+            const formattedOrganicData = crop.organicFertilizer.map(item => ({
+              [item.name]: item.description
+            }));
+      
+            const formattedDiseaseData = crop.disease.map(item => ({
+              [item.name]: item.description
+            }));
+      
+            return {
+              ...crop._doc, // Spread the original crop document
+              chemicalFertilizer: formattedChemicalData,
+              organicFertilizer: formattedOrganicData,
+              disease: formattedDiseaseData
+            };
+          });
 
         response.send({ message: "Successfully fetched all pending crops", data: crops });
     } catch (error) {
