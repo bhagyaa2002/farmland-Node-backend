@@ -1,5 +1,6 @@
 import { userModel } from "./userModel.js";
 import e, { request, response } from "express";
+import CryptoJS from 'crypto-js';
 
 export const signUp = async (request, response) => {
   console.log("inside signup service");
@@ -56,7 +57,15 @@ export const login = async (request, response) => {
     userModel
       .findOne({ email: email })
       .then((result) => {
-        if (password === result.password) {
+        const bytes = CryptoJS.AES.decrypt(password, 'your-secret-key');
+        const originalPassword = bytes.toString(CryptoJS.enc.Utf8);
+
+        const bytes1 = CryptoJS.AES.decrypt(result.password, 'your-secret-key');
+        const dbPassword = bytes1.toString(CryptoJS.enc.Utf8);
+        console.log("line 62",originalPassword);
+        console.log("line 62",dbPassword);
+        
+        if (originalPassword === dbPassword) {
           const userInfo = {
             _id: result._id,
             user_name: result.user_name,
