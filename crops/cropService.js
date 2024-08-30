@@ -4,6 +4,7 @@ import e, { request, response } from "express";
 export const addCrop = async(request,response)=>{
     console.log("inside crop upload service");
   try {
+    console.log("line 7",request.body)
     const { cropname } = request.body.cropname;
 
     const result = await cropModel.findOne({ cropname: cropname });

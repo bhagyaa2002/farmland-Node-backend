@@ -182,7 +182,8 @@ const offerPrice = Number(data.offerPrice);
             quantity: data.quantity,
             offerPrice: data.offerPrice,
             farmerName: data.farmerName,
-            totalAmount: totalAmount
+            totalAmount: totalAmount,
+            email:data.email
 
         }
     };
@@ -213,7 +214,8 @@ const offerPrice = Number(data.offerPrice);
           quantity: session.metadata.quantity,
           owner: session.metadata.owner,
           totalAmount: session.metadata.totalAmount, // Send the total amount
-          farmerName:session.metadata.farmerName
+          farmerName:session.metadata.farmerName,
+          email:session.metadata.email
       }
       res.send({ message: "Successfully created payment seesion", data: data});
     } catch (error) {

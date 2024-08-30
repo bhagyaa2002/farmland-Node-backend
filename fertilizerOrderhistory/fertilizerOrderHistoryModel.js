@@ -31,9 +31,13 @@ const fertilizerOrderHistorySchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    owner: {
+    email: {
       type: String,
-      required: true,
+      required: false,
+    },
+    url: {
+      type: String,
+      required: false,
     },
     buyerName: {
       type: String,

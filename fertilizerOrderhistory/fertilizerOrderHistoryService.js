@@ -17,9 +17,9 @@ export const addFertilizerOrderHistory = async(request,response)=>{
 export const fetchFertilizerOrderHistoryByUser = async(request,response)=>{
     console.log("inside fetchFertilizerOrderHistoryByUser service");
     try {
-        const { orderedBy } = request.body;
+        const { email } = request.body;
     
-        const result = await fertilizerOrderHistoryModel.find({ orderedBy: orderedBy });
+        const result = await fertilizerOrderHistoryModel.find({ email: email }).sort({ createdAt: -1 });
     
           response.send({ message: "Successfully fetched crop orders for user", data:  result });
       } catch (error) {

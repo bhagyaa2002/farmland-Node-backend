@@ -8,19 +8,19 @@ export const addPendingCrop = async(request,response)=>{
     console.log("line 8", request.body);
 
     const result = await pendingCropModel.findOne({ cropname: cropname });
-    const formattedChemicalData = request.body.chemicalFertilizer.map(item => {
+    const formattedChemicalData = (request.body.chemicalFertilizer || []).map(item => {
         const monthRange = Object.keys(item);
         const description = item[monthRange];
         const name=monthRange[0];
         return { name, description };
       });
-    const formattedOrganicData = request.body.organicFertilizer.map(item => {
+    const formattedOrganicData = (request.body.organicFertilizer || []).map(item => {
         const monthRange = Object.keys(item);
         const description = item[monthRange];
         const name=monthRange[0];
         return { name, description };
       });
-      const formattedDiseaseData = request.body.disease.map(item => {
+      const formattedDiseaseData = (request.body.disease || []).map(item => {
         const monthRange = Object.keys(item);
         const description = item[monthRange];
         const name=monthRange[0];
