@@ -1,6 +1,72 @@
 import { userModel } from "./userModel.js";
 import e, { request, response } from "express";
 import CryptoJS from 'crypto-js';
+import nodemailer from 'nodemailer';
+
+
+const generateRandomPassword = () => {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let password = '';
+  for (let i = 0; i < 10; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    password += chars[randomIndex];
+  }
+  return password;
+};
+
+ const sendNewPasswordEmail = async (email, newPassword) => {
+  console.log("line 18 inside password reset", email, newPassword);
+  
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail', // e.g., Gmail, Outlook, etc.
+    auth: {
+      user: 'bhagyaammenadka@gmail.com', // Replace with your email
+      pass: 'nmmx oabx kzll gyya', // Replace with your email password
+    },
+  });
+
+  const mailOptions = {
+    from: 'bhagyaammenadka@gmail.com',
+    to: email,
+    subject: 'Your New Password',
+    text: `Your new password is: ${newPassword}`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+export const forgotPassword = async (request, response) => {
+  console.log("inside forgot password service");
+  try {
+    const { email, phone } = request.body;
+
+    // Find user by email and phone
+    const user = await userModel.findOne({ email: email, phoneNo: phone });
+
+    if (!user) {
+      response.status(404).send({ message: "User not found or phone number does not match" });
+      return;
+    }
+
+    // Generate new password
+    const newPassword = generateRandomPassword();
+
+    // Encrypt the new password
+    const encryptedPassword = CryptoJS.AES.encrypt(newPassword, 'your-secret-key').toString();
+
+    // Update user's password in the database
+    user.password = encryptedPassword;
+    await user.save();
+
+    // Send the new password to the user's email
+    await sendNewPasswordEmail(email, newPassword);
+
+    response.send({ message: "New password sent to your email address" });
+  } catch (error) {
+    console.error(error);
+    response.status(500).send({ message: "Internal Server Error" });
+  }
+};
 
 export const signUp = async (request, response) => {
   console.log("inside signup service");

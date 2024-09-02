@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { mongoConnection } from "./utils/mongoDB.js";
-import { signUp, getUserDetails,login,updateUserPasswordByEmail } from "./users/userService.js";
+import { signUp, getUserDetails,login,updateUserPasswordByEmail,forgotPassword } from "./users/userService.js";
 import { addCrop,updateCrop,deleteCrop,getAllCrops } from "./crops/cropService.js";
 import { addPendingCrop,updatePendingCrop,deletePendingCrop,getAllPendingCrops } from "./pendingCrops/pendngCropService.js";
 import { addCropListing,updateCropListing,deleteCropListing,getAllCropListing,getOneCropListing} from "./cropListing/cropListingService.js";
@@ -21,7 +21,6 @@ app.use(express.json({ limit: "10mb" }));
 const PORT = process.env.PORT || 8080;
 mongoConnection();
 const stripe = new Stripe("sk_test_51OYphVSIebbx1BJCNAITeg0nA6CaflgvU4TmUBZfiJ7v0mFa4XMtvDQKbwpxFiJcOI7k0RKFbqXpuWNllRaWSdhQ00Kx8aNwVJ");
-   
 console.log("Backend port", PORT);
 
 app.get("/", (request, response) => {
@@ -41,6 +40,10 @@ app.post("/login", (request, response) => {
 app.post("/resetPassword", (request, response) => {
     updateUserPasswordByEmail(request, response);
   });
+  app.post("/forgotPassword", (request, response) => {
+    forgotPassword(request, response);
+  });
+  
 app.post("/addCrop", (request, response) => {
     addCrop(request, response);
   });
