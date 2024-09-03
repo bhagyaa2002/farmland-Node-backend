@@ -9,28 +9,28 @@ export const addCrop = async(request,response)=>{
 
     const result = await cropModel.findOne({ cropname: cropname });
     
-    const formattedChemicalData = request.body.chemicalFertilizer.map(item => {
-        const monthRange = Object.keys(item);
-        const description = item[monthRange];
-        const name=monthRange[0];
-        return { name, description };
-      });
-    const formattedOrganicData = request.body.organicFertilizer.map(item => {
-        const monthRange = Object.keys(item);
-        const description = item[monthRange];
-        const name=monthRange[0];
-        return { name, description };
-      });
-      const formattedDiseaseData = request.body.disease.map(item => {
-        const monthRange = Object.keys(item);
-        const description = item[monthRange];
-        const name=monthRange[0];
-        return { name, description };
-      });
-    request.body.chemicalFertilizer=formattedChemicalData;
-    request.body.organicFertilizer=formattedOrganicData;
-    request.body.disease=formattedDiseaseData;
-    
+    // const formattedChemicalData = (request.body.chemicalFertilizer || []).map(item => {
+    //     const monthRange = Object.keys(item);
+    //     const description = item[monthRange];
+    //     const name=monthRange[0];
+    //     return { name, description };
+    //   });
+    // const formattedOrganicData = (request.body.organicFertilizer || []).map(item => {
+    //     const monthRange = Object.keys(item);
+    //     const description = item[monthRange];
+    //     const name=monthRange[0];
+    //     return { name, description };
+    //   });
+    //   const formattedDiseaseData = (request.body.disease || []).map(item => {
+    //     const monthRange = Object.keys(item);
+    //     const description = item[monthRange];
+    //     const name=monthRange[0];
+    //     return { name, description };
+    //   });
+    // request.body.chemicalFertilizer=formattedChemicalData;
+    // request.body.organicFertilizer=formattedOrganicData;
+    // request.body.disease=formattedDiseaseData;
+    console.log("line 33",request.body);
     if (result) {
       response.send({ message: "crop already exist" });
     } else {

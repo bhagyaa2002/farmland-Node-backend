@@ -29,7 +29,8 @@ export const addPendingCrop = async(request,response)=>{
     request.body.chemicalFertilizer=formattedChemicalData;
     request.body.organicFertilizer=formattedOrganicData;
     request.body.disease=formattedDiseaseData;
-
+      console.log("line 32",request.body);
+      
     if (result) {
       response.send({ message: "pending crop already exist" });
     } else {

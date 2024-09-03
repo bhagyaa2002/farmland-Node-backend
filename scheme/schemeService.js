@@ -17,7 +17,7 @@ export const addScheme = async(request,response)=>{
 export const getAllScheme = async (request, response) => {
     console.log("inside get all Scheme  service");
     try {
-        const scheme  = await schemeModel.find();
+        const scheme  = await schemeModel.find().sort({ createdAt : -1 });
         response.send({ message: "Successfully fetched all Scheme ", data: scheme });
     } catch (error) {
         console.error(error);

@@ -18,7 +18,7 @@ export const getAllNews = async (request, response) => {
     console.log("inside get all article service");
     try {
 
-        const news = await newsModel.find();
+        const news = await newsModel.find().sort({ createdAt : -1 });
         response.send({ message: "Successfully fetched all news", data: news });
     } catch (error) {
         console.error(error);

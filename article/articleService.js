@@ -17,7 +17,7 @@ export const addArticle = async(request,response)=>{
 export const getAllArticle = async (request, response) => {
     console.log("inside get all article service");
     try {
-        const article = await articleModel.find();
+        const article = await articleModel.find().sort({ createdAt : -1 });
         response.send({ message: "Successfully fetched all article", data: article });
     } catch (error) {
         console.error(error);
