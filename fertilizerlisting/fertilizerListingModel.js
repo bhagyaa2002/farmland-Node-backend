@@ -36,6 +36,10 @@ const fertilizerListingSchema = new mongoose.Schema({
     quantity: {
         type: String,
         required: true,
+      },
+      NoOfItemsAvailable: {
+        type: Number,
+        required: true,
       }
   },{ timestamps: true });
 

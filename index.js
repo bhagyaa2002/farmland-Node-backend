@@ -12,6 +12,7 @@ import { addFertilizerOrderHistory,fetchFertilizerOrderHistoryByUser,fetchFertil
 import { addArticle,getAllArticle } from "./article/articleService.js";
 import { addScheme,getAllScheme } from "./scheme/schemeService.js";
 import { addNews,getAllNews } from "./news/newsService.js";
+import {addCart, deleteCartByUser, updateCartById, fetchCartByUser} from "./cart/cartService.js"
 import Stripe from "stripe";
 
 dotenv.config();
@@ -226,6 +227,21 @@ const offerPrice = Number(data.offerPrice);
         res.status(500).send('Internal Server Error');
     }
 });
+
+app.post("/addCart", (request, response) => {
+  addCart(request, response);
+});
+
+app.post("/fetchCartByUser", (request, response) => {
+  fetchCartByUser(request, response);
+});
+app.post("/deleteCartByUser", (request, response) => {
+  deleteCartByUser(request, response);
+});
+app.post("/updateCartById", (request, response) => {
+  updateCartById(request, response);
+});
+
 
 
 
