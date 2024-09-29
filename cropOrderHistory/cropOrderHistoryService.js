@@ -46,7 +46,7 @@ export const getAllCropOrderTransaction = async (request, response) => {
   console.log("inside get all crop Order service");
   try {
 
-      const cropOrder = await cropOrderHistoryModel.find();
+      const cropOrder = await cropOrderHistoryModel.find().sort({ updatedAt: -1 });
       response.send({ message: "Successfully fetched all cropOrder", data: cropOrder });
   } catch (error) {
       console.error(error);
