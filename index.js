@@ -12,7 +12,7 @@ import { addFertilizerOrderHistory,fetchFertilizerOrderHistoryByUser,fetchFertil
 import { addArticle,getAllArticle } from "./article/articleService.js";
 import { addScheme,getAllScheme } from "./scheme/schemeService.js";
 import { addNews,getAllNews } from "./news/newsService.js";
-import {addCart, deleteCartByUser, updateCartById, fetchCartByUser} from "./cart/cartService.js"
+import {addCart, deleteCartByUser, updateCartById, fetchCartByUser, deleteCartById, fetchCartById} from "./cart/cartService.js"
 import Stripe from "stripe";
 
 dotenv.config();
@@ -148,52 +148,129 @@ app.post("/updateFertilizerListing", (request, response) => {
     getAllNews(request, response);
   });
 
-  app.post("/checkout",async(request,response)=>{
-    const data=request.body;
-    console.log("line 148",data);
-    const quantity1 = Number(data.quantity);
-const offerPrice = Number(data.offerPrice);
-    const totalAmount=quantity1* offerPrice ;
-    const params = {
+//   app.post("/checkout",async(request,response)=>{
+//     const data=request.body;
+//     console.log("line 148",data);
+//     const quantity1 = Number(data.quantity);
+// const offerPrice = Number(data.offerPrice);
+//     const totalAmount=quantity1* offerPrice ;
+//     const params = {
+//       submit_type: "pay",
+//       mode: "payment",
+//       payment_method_types: ["card"],
+//       billing_address_collection: "auto",
+//       shipping_options: [{ shipping_rate: "shr_1OYqeFSIebbx1BJCVma4TXJL" }],
+//       line_items: [
+//         {
+//           price_data: {
+//             currency: "INR",
+//             product_data: {
+//               name: data.name,
+//               // images: [data.image], // Uncomment and use if you have an image
+//             },
+//             unit_amount: data.offerPrice * 100, // Convert to smallest currency unit (e.g., paise)
+//           },
+//           adjustable_quantity: {
+//             enabled: true,
+//             minimum: 1,
+//           },
+//           quantity: data.quantity,
+//         },
+//       ],
+//       success_url: `http://localhost:3000/buysucess/?session_id={CHECKOUT_SESSION_ID}`,
+//       cancel_url: "http://localhost:3000/cancel",
+      //  metadata: {
+      //       id: data.id, // Include the id in the metadata
+      //       owner: data.owner,
+      //       name: data.name,
+      //       quantity: data.quantity,
+      //       offerPrice: data.offerPrice,
+      //       farmerName: data.farmerName,
+      //       totalAmount: totalAmount,
+      //       email:data.email
+
+      //   }
+//     };
+//      const session = await stripe.checkout.sessions.create(params);
+//     response.send({ message: "Successfully created payment seesion", data: session.id});
+//   })
+
+
+
+
+
+app.post("/checkout", async (request, response) => {
+  const data = request.body;
+  console.log("line 148", data);
+
+  // Initialize an empty array for line items
+  const lineItems = [];
+  const itemsList = [];
+  let totalAmount=0;
+  let email="";
+  // Iterate through each product in the data array
+  data.forEach(item => {
+      const quantity = Number(item.Quantity); // Ensure Quantity is a number
+      const offerPrice = Number(item.price); // Ensure price is a number
+      totalAmount =totalAmount+( quantity * offerPrice); // Calculate total amount for each item
+      email=item.email
+
+      itemsList.push({
+        id: item._id, // Unique ID for the item
+    });
+
+      // Push the item details to line items array
+      lineItems.push({
+          price_data: {
+              currency: "INR",
+              product_data: {
+                  name: item.cropName,
+                  // images: [item.url], // Uncomment if you want to include images
+              },
+              unit_amount: offerPrice * 100, // Convert to smallest currency unit (e.g., paise)
+          },
+          adjustable_quantity: {
+              enabled: true,
+              minimum: 1,
+          },
+          quantity: quantity,
+      });
+  });
+
+  const params = {
       submit_type: "pay",
       mode: "payment",
       payment_method_types: ["card"],
       billing_address_collection: "auto",
       shipping_options: [{ shipping_rate: "shr_1OYqeFSIebbx1BJCVma4TXJL" }],
-      line_items: [
-        {
-          price_data: {
-            currency: "INR",
-            product_data: {
-              name: data.name,
-              // images: [data.image], // Uncomment and use if you have an image
-            },
-            unit_amount: data.offerPrice * 100, // Convert to smallest currency unit (e.g., paise)
-          },
-          adjustable_quantity: {
-            enabled: true,
-            minimum: 1,
-          },
-          quantity: data.quantity,
-        },
-      ],
+      line_items: lineItems, // Use the array of line items
       success_url: `http://localhost:3000/buysucess/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: "http://localhost:3000/cancel",
-       metadata: {
-            id: data.id, // Include the id in the metadata
-            owner: data.owner,
-            name: data.name,
-            quantity: data.quantity,
-            offerPrice: data.offerPrice,
-            farmerName: data.farmerName,
-            totalAmount: totalAmount,
-            email:data.email
+      metadata: {
+        items: JSON.stringify(itemsList), // Convert itemsList to a string for Stripe metadata
+        totalAmount:totalAmount,
+        email:email
+    }
+  };
 
-        }
-    };
-     const session = await stripe.checkout.sessions.create(params);
-    response.send({ message: "Successfully created payment seesion", data: session.id});
-  })
+  try {
+      const session = await stripe.checkout.sessions.create(params);
+      response.send({ message: "Successfully created payment session", data: session.id });
+  } catch (error) {
+      console.error("Error creating checkout session:", error);
+      response.status(500).send({ error: "Failed to create checkout session" });
+  }
+});
+
+
+
+
+
+
+
+
+
+
   
   app.post('/checkout/success', async (req, res) => {
     console.log("line 191",req.body);
@@ -212,15 +289,17 @@ const offerPrice = Number(data.offerPrice);
 
         // Send the necessary data for the frontend to complete the purchase
         const data= {
-          id: session.metadata.id,
-          name: session.metadata.name,
-          offerPrice: session.metadata.offerPrice / 100,
-          quantity: session.metadata.quantity,
-          owner: session.metadata.owner,
+          ids: JSON.parse(session.metadata.items),
+          // name: session.metadata.name,
+          // offerPrice: session.metadata.offerPrice / 100,
+          // quantity: session.metadata.quantity,
+          // owner: session.metadata.owner,
           totalAmount: session.metadata.totalAmount, // Send the total amount
-          farmerName:session.metadata.farmerName,
+          // farmerName:session.metadata.farmerName,
           email:session.metadata.email
       }
+      console.log("line 298",data);
+      
       res.send({ message: "Successfully created payment seesion", data: data});
     } catch (error) {
         console.error('Error retrieving Stripe session:', error);
@@ -241,6 +320,14 @@ app.post("/deleteCartByUser", (request, response) => {
 app.post("/updateCartById", (request, response) => {
   updateCartById(request, response);
 });
+app.post("/deleteCartById", (request, response) => {
+  deleteCartById(request, response);
+});
+app.post("/fetchCartById", (request, response) => {
+  fetchCartById(request, response);
+});
+
+
 
 
 

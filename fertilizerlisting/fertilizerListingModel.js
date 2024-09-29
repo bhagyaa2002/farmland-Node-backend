@@ -28,7 +28,7 @@ const fertilizerListingSchema = new mongoose.Schema({
     fertilizertype: {
       type: String,
       required: true,
-    },
+    }, 
     owner: {
       type: String,
       required: true,
