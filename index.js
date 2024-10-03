@@ -198,7 +198,7 @@ app.post("/updateFertilizerListing", (request, response) => {
 
 
 
-
+//the below function used to create stripe session
 app.post("/checkout", async (request, response) => {
   const data = request.body;
   console.log("line 148", data);
